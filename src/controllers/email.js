@@ -8,7 +8,8 @@ const create = async (req, res) => {
     for (let hacker of hackers) {
       await emailService.send(hacker, template);
     }
-    httpResponse.successResponse(res, null);
+
+    httpResponse.successResponse(res, { success: true });
   } catch (e) {
     httpResponse.failureResponse(res, { e });
   }

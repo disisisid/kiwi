@@ -9,7 +9,6 @@ Sweet Services
 - Header
 
   - Authorization : "Bearer JD8as9d..."
-  -
 
 - Body
   - hackers: Array of hacker objects
@@ -38,7 +37,7 @@ Request a token to use for the service routes.
 
 _example request_
 
-`http://localhost:3005/api/token?email=example@email.com&password=$biensupernice`
+`http://localhost:3005/kiwi/token?email=example@email.com&password=$biensupernice`
 
 ```
 {

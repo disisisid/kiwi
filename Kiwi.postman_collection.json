@@ -1,0 +1,74 @@
+{
+	"info": {
+		"_postman_id": "453d8186-eaf4-409f-b02f-eabca3f9f21f",
+		"name": "Kiwi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Development",
+			"item": [
+				{
+					"name": "sendMail",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkY2FzdDg4QGZpdS5lZHUiLCJpYXQiOjE1NDAzNTI1MDEsImV4cCI6MTU0MDM1NjEwMX0.0sAGSRQFrscqVGlrRvyOftPQWTbABWwF2W3wdPTGSkc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"template\":\"registration_open\",\n\t\"hackers\": [\n\t\t{\n\t\t\t\"first_name\": \"Bob\",\n\t\t\t\"last_name\": \"Hope\",\n\t\t\t\"email\":\"bobHope@gmail.com\"\n\t\t}\n\t]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3005/kiwi/email",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3005",
+							"path": [
+								"kiwi",
+								"email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getToken",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Production",
+			"item": []
+		}
+	]
+}

@@ -1,15 +1,15 @@
 import path from "path";
-import { readFile } from "fs";
-import mailer from "nodemailer";
+import { createTransport } from "nodemailer";
+import Email from "email-templates";
 
 const { EMAIL, EMAIL_PASSWORD } = process.env;
 
-const smtpTransport = mailer.createTransport({
+const smtpTransport = createTransport({
   service: "gmail",
   auth: { user: EMAIL, pass: EMAIL_PASSWORD }
 });
 
-const asyncMail = mail =>
+const sendMail = mail =>
   new Promise((resolve, reject) => {
     smtpTransport.sendMail(mail, (err, res) => {
       smtpTransport.close();
@@ -18,50 +18,33 @@ const asyncMail = mail =>
     });
   });
 
-const asyncReadFile = path =>
-  new Promise((resolve, reject) =>
-    readFile(path, "utf-8", (err, data) => (err ? reject(err) : resolve(data)))
-  );
-
-const getEmailTemplate = template =>
+const loadTemplate = (templateName, hacker) =>
   new Promise(async (resolve, reject) => {
-    const templatePath = path.resolve(`src/templates/emails/${template}.json`);
+    const templateDir = path.resolve("src/templates/emails/" + templateName);
+    const template = new Email({ views: { options: { extension: "hbs" } } });
+
     try {
-      const fileData = await asyncReadFile(templatePath);
-      const jsonData = JSON.parse(fileData);
-      resolve(jsonData);
+      const hackerTemplate = template.renderAll(templateDir, hacker);
+      resolve(hackerTemplate);
     } catch (e) {
       reject(e);
     }
   });
 
-const getHTMLTemplate = template =>
+const send = (hacker, templateName) =>
   new Promise(async (resolve, reject) => {
-    const templatePath = path.resolve(`src/templates/emails/${template}.html`);
-    try {
-      const fileData = await asyncReadFile(templatePath);
-      resolve(fileData);
-    } catch (e) {
-      reject(e);
-    }
-  });
-
-const send = (hacker, template) =>
-  new Promise(async (resolve, reject) => {
-    const emailTemplate = await getEmailTemplate(template);
-    const htmlTemplate = await getHTMLTemplate(template);
-
-    const mail = {
-      to: hacker.email,
-      from: EMAIL,
-      subject: emailTemplate.subject,
-      text: emailTemplate.text,
-      html: htmlTemplate
-    };
+    const hackerTemplate = await loadTemplate(templateName, hacker);
 
     try {
-      await asyncMail(mail);
-      resolve();
+      const mail = {
+        to: hacker.email,
+        from: EMAIL,
+        subject: hackerTemplate.subject,
+        html: hackerTemplate.html,
+        text: hackerTemplate.text
+      };
+
+      resolve(sendMail(mail));
     } catch (e) {
       reject(e);
     }
