@@ -47,3 +47,9 @@ _example request_
     }
 }
 ```
+
+### Run with Docker
+```
+docker build -t kiwi .
+docker run -p 3005:3005 --name kiwi kiwi
+```
